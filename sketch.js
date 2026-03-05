@@ -1,3 +1,14 @@
+// Get effective mouse position (either actual mouse or tilt-based on mobile)
+function getEffectiveMousePos() {
+  if (window.isMobileDevice && window.tiltOffsetX !== undefined) {
+    return {
+      x: width / 2 + window.tiltOffsetX,
+      y: height / 2 + window.tiltOffsetY
+    };
+  }
+  return { x: mouseX, y: mouseY };
+}
+
 class axolotl{
     constructor(x, y){
       this.x = x
@@ -16,8 +27,9 @@ class axolotl{
     gill(gill_type, _clr1, _clr2, face_clr){
       noStroke()
       fill(_clr1[0],_clr1[1],_clr1[2])
-      var slight_Xm = map(mouseX - this.x, -width/2, width/2, -5, 5, true)
-      var slight_Ym = map(mouseY - this.y, -height/2, height/2, -5, 5, true)
+      let effectivePos = getEffectiveMousePos();
+      var slight_Xm = map(effectivePos.x - this.x, -width/2, width/2, -5, 5, true)
+      var slight_Ym = map(effectivePos.y - this.y, -height/2, height/2, -5, 5, true)
       if (gill_type%7 == 0){
         // 1st type of gill
         // >(0_0)<
@@ -167,11 +179,12 @@ class axolotl{
     // function used to construct the eyes section, primarily by changing shapes and colors to create differences
     eyes(eyes_type, _clr, face_clr){
       noStroke()
-      var slight_Xm = map(mouseX - this.x, -width/2, width/2, -5, 5, true)
-      var slight_Ym = map(mouseY - this.y, -height/2, height/2, -5, 5, true)
-      var toEyeDist = dist(mouseX, mouseY, this.x, this.y)
+      let effectivePos = getEffectiveMousePos();
+      var slight_Xm = map(effectivePos.x - this.x, -width/2, width/2, -5, 5, true)
+      var slight_Ym = map(effectivePos.y - this.y, -height/2, height/2, -5, 5, true)
+      var toEyeDist = dist(effectivePos.x, effectivePos.y, this.x, this.y)
       // *Use this variable to calculate the highlight size in the eyes
-      var highlight = min(dist(mouseX, mouseY, width, 0), dist(mouseX, mouseY, 0, height), dist(mouseX, mouseY, 0, 0), dist(mouseX, mouseY, height, width))
+      var highlight = min(dist(effectivePos.x, effectivePos.y, width, 0), dist(effectivePos.x, effectivePos.y, 0, height), dist(effectivePos.x, effectivePos.y, 0, 0), dist(effectivePos.x, effectivePos.y, height, width))
       
       if(eyes_type%7 == 0){
         // 1st type of eyes
@@ -362,8 +375,9 @@ class axolotl{
     mouth(mouth_type, _clr, face_clr){
       noStroke()
       fill(_clr[0], _clr[1], _clr[2])
-      var slight_Xm = map(mouseX - this.x, -width/2, width/2, -5, 5, true)
-      var slight_Ym = map(mouseY - this.y, -height/2, height/2, -5, 5, true)
+      let effectivePos = getEffectiveMousePos();
+      var slight_Xm = map(effectivePos.x - this.x, -width/2, width/2, -5, 5, true)
+      var slight_Ym = map(effectivePos.y - this.y, -height/2, height/2, -5, 5, true)
       var toEyeDist = dist(mouseX, mouseY, this.x, this.y)
       if(mouth_type%7 == 0){
         push()

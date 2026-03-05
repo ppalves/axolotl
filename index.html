@@ -152,8 +152,8 @@
         }
         
         .scroll-hint {
-            position: fixed;
-            bottom: 40px;
+            position: absolute;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -189,8 +189,8 @@
             <div class="bubble-background" id="bubble-container"></div>
             <div class="landing-content">
                 <div class="landing-text">An Axolotl, for Chana</div>
-                <div class="scroll-hint">↓ Scroll to continue ↓</div>
             </div>
+            <div class="scroll-hint">↓ Scroll to continue ↓</div>
         </div>
         
         <!-- Axolotl Page -->
@@ -296,6 +296,58 @@
         window.addEventListener('resize', () => {
             generateShapes();
         });
+        
+        // Device orientation tracking for mobile tilt control
+        let initialTilt = { beta: 0, gamma: 0, set: false };
+        let currentTilt = { beta: 0, gamma: 0 };
+        window.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        // Global variables for p5.js to access
+        window.tiltOffsetX = 0;
+        window.tiltOffsetY = 0;
+        
+        function handleOrientation(event) {
+            let beta = event.beta;   // -180 to 180, rotation around X axis
+            let gamma = event.gamma; // -90 to 90, rotation around Z axis
+            
+            // On first event, set the neutral position
+            if (!initialTilt.set) {
+                initialTilt.beta = beta;
+                initialTilt.gamma = gamma;
+                initialTilt.set = true;
+            }
+            
+            currentTilt.beta = beta;
+            currentTilt.gamma = gamma;
+            
+            // Calculate delta from neutral position
+            let deltaBeta = currentTilt.beta - initialTilt.beta;
+            let deltaGamma = currentTilt.gamma - initialTilt.gamma;
+            
+            // Map tilt to movement with low sensitivity
+            // 30 degree tilt produces ~50px movement for subtle effect
+            window.tiltOffsetX = (deltaGamma / 30) * 50;
+            window.tiltOffsetY = (deltaBeta / 30) * 50;
+        }
+        
+        // Request permission and setup device orientation for iOS 13+
+        if (window.isMobileDevice) {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // iOS 13+ requires user permission
+                document.addEventListener('click', () => {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation);
+                            }
+                        })
+                        .catch(console.error);
+                }, { once: true });
+            } else {
+                // Android and older iOS
+                window.addEventListener('deviceorientation', handleOrientation);
+            }
+        }
     </script>
 
     <!-- Load p5.js and sketch -->
