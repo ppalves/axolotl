@@ -300,26 +300,25 @@
         // Device orientation tracking for mobile tilt control
         let initialTilt = { beta: 0, gamma: 0, set: false };
         let currentTilt = { beta: 0, gamma: 0 };
+        let latestOrientation = { beta: 0, gamma: 0 };
         window.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         // Global variables for p5.js to access
         window.tiltOffsetX = 0;
         window.tiltOffsetY = 0;
         
-        // Throttle orientation calculations to reduce performance impact
-        let lastOrientationUpdate = 0;
-        const ORIENTATION_UPDATE_INTERVAL = 66; // ~15fps for orientation updates (66ms)
+        // Capture latest orientation data from device
+        function captureOrientation(event) {
+            latestOrientation.beta = event.beta;
+            latestOrientation.gamma = event.gamma;
+        }
         
-        function handleOrientation(event) {
-            const now = Date.now();
-            // Only update if 33ms has passed since last update
-            if (now - lastOrientationUpdate < ORIENTATION_UPDATE_INTERVAL) return;
-            lastOrientationUpdate = now;
+        // Process orientation at 15fps (every 66ms)
+        function processOrientation() {
+            let beta = latestOrientation.beta;
+            let gamma = latestOrientation.gamma;
             
-            let beta = event.beta;   // -180 to 180, rotation around X axis
-            let gamma = event.gamma; // -90 to 90, rotation around Z axis
-            
-            // On first event, set the neutral position
+            // On first call, set the neutral position
             if (!initialTilt.set) {
                 initialTilt.beta = beta;
                 initialTilt.gamma = gamma;
@@ -335,8 +334,8 @@
             
             // Map tilt to movement with increased sensitivity
             // 1 degree tilt produces ~40px movement for strong effect
-            window.tiltOffsetX = deltaGamma * 40;
-            window.tiltOffsetY = deltaBeta * 40;
+            window.tiltOffsetX = deltaGamma * 10;
+            window.tiltOffsetY = deltaBeta * 10;
         }
         
         // Request permission and setup device orientation for iOS 13+
@@ -347,14 +346,16 @@
                     DeviceOrientationEvent.requestPermission()
                         .then(permissionState => {
                             if (permissionState === 'granted') {
-                                window.addEventListener('deviceorientation', handleOrientation);
+                                window.addEventListener('deviceorientation', captureOrientation);
+                                setInterval(processOrientation, 66); // 15fps processing
                             }
                         })
                         .catch(console.error);
                 }, { once: true });
             } else {
                 // Android and older iOS
-                window.addEventListener('deviceorientation', handleOrientation);
+                window.addEventListener('deviceorientation', captureOrientation);
+                setInterval(processOrientation, 66); // 15fps processing
             }
         }
     </script>
