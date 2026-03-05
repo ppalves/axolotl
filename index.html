@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One" rel="stylesheet">
+    <title>An Axolotl, for Chana</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Bagel Fat One', 'Arial', sans-serif;
+            background: white;
+            overflow: hidden;
+        }
+        
+        .pages-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
+        }
+        
+        .pages-container.show-axolotl {
+            transform: translateY(-100vh);
+        }
+        
+        /* Landing Page Styles */
+        .landing-page {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #FFE757 0%, #FFED4E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bubble-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .geometric-shape {
+            position: absolute;
+            opacity: 0.5;
+        }
+        
+        .sphere {
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2) 40%, rgba(0, 0, 0, 0.3));
+            box-shadow: 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.3),
+                0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .donut {
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(255, 182, 193, 0.3) 30%, rgba(255, 105, 180, 0.5) 60%, rgba(0, 0, 0, 0.2));
+            box-shadow: 
+                inset 0 2px 5px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+                0 20px 40px rgba(0, 0, 0, 0.25);
+            animation: float 7s ease-in-out infinite;
+        }
+        
+        .blob {
+            border-radius: 45% 55% 50% 50% / 50% 45% 55% 50%;
+            background: 
+                radial-gradient(circle at 35% 35%, rgba(173, 216, 230, 0.8), rgba(173, 216, 230, 0.2) 40%, rgba(0, 0, 0, 0.2));
+            box-shadow: 
+                inset -3px -3px 6px rgba(0, 0, 0, 0.25),
+                0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .organic {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            background: 
+                radial-gradient(circle at 32% 32%, rgba(255, 218, 185, 0.8), rgba(255, 182, 193, 0.3) 40%, rgba(0, 0, 0, 0.25));
+            box-shadow: 
+                inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+                0 18px 38px rgba(0, 0, 0, 0.28);
+            animation: float 7.5s ease-in-out infinite;
+        }
+        
+        .wave {
+            border-radius: 50% 50% 45% 55% / 55% 45% 50% 50%;
+            background: 
+                radial-gradient(circle at 38% 38%, rgba(200, 220, 255, 0.7), rgba(173, 216, 230, 0.2) 45%, rgba(0, 0, 0, 0.2));
+            box-shadow: 
+                inset -3px -3px 5px rgba(0, 0, 0, 0.2),
+                0 16px 36px rgba(0, 0, 0, 0.32);
+            animation: float 6.5s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg); 
+                opacity: 0.5;
+            }
+            25% { 
+                transform: translateY(-25px) translateX(10px) rotate(5deg); 
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-40px) translateX(-5px) rotate(15deg); 
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateY(-15px) translateX(15px) rotate(-5deg); 
+                opacity: 0.55;
+            }
+        }
+        
+        .landing-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: clamp(20px, 5vw, 40px);
+        }
+        
+        .landing-text {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: rgba(100, 100, 100, 0.9);
+            font-weight: 400;
+            letter-spacing: 2px;
+            font-family: 'Bagel Fat One', 'Arial', sans-serif;
+            animation: fadeIn 1.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .scroll-hint {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 1rem;
+            color: rgba(100, 100, 100, 0.7);
+            font-family: 'Bagel Fat One', 'Arial', sans-serif;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* Axolotl Page Styles */
+        .axolotl-page {
+            width: 100%;
+            min-height: 100vh;
+            background: #333;
+            position: relative;
+        }
+        
+        #p5-container {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="pages-container" id="pages-container">
+        <!-- Landing Page -->
+        <div class="landing-page">
+            <div class="bubble-background" id="bubble-container"></div>
+            <div class="landing-content">
+                <div class="landing-text">An Axolotl, for Chana</div>
+                <div class="scroll-hint">↓ Scroll to continue ↓</div>
+            </div>
+        </div>
+        
+        <!-- Axolotl Page -->
+        <div class="axolotl-page">
+            <div id="p5-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentPage = 0;
+        let isTransitioning = false;
+        const pagesContainer = document.getElementById('pages-container');
+        
+        // Prevent default scroll behavior
+        window.addEventListener('scroll', () => {
+            window.scrollTo(0, 0);
+        });
+        
+        // Generate random geometric shapes for landing page
+        function generateShapes() {
+            const container = document.getElementById('bubble-container');
+            if (!container) return;
+            container.innerHTML = '';
+            const shapeCount = window.innerWidth > 768 ? 15 : 8;
+            const shapeTypes = ['sphere', 'donut', 'blob', 'organic', 'wave'];
+            
+            for (let i = 0; i < shapeCount; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'geometric-shape';
+                
+                const shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+                shape.classList.add(shapeType);
+                
+                const size = Math.random() * 120 + 40;  // Larger size range
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 2;
+                const duration = Math.random() * 2 + 5;  // Vary animation duration
+                
+                shape.style.width = size + 'px';
+                shape.style.height = size + 'px';
+                shape.style.left = left + '%';
+                shape.style.top = top + '%';
+                shape.style.animationDelay = delay + 's';
+                shape.style.animationDuration = duration + 's';
+                
+                container.appendChild(shape);
+            }
+        }
+        
+        generateShapes();
+        
+        // Handle scroll to switch pages
+        let lastScrollTime = 0;
+        window.addEventListener('wheel', (e) => {
+            const now = Date.now();
+            if (now - lastScrollTime < 800 || isTransitioning) return;
+            
+            if (e.deltaY > 0 && currentPage === 0) {
+                // Scroll down on landing page -> show axolotl page
+                isTransitioning = true;
+                lastScrollTime = now;
+                currentPage = 1;
+                pagesContainer.classList.add('show-axolotl');
+                document.body.classList.add('show-axolotl');
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 800);
+            } else if (e.deltaY < 0 && currentPage === 1) {
+                // Scroll up on axolotl page -> show landing page
+                isTransitioning = true;
+                lastScrollTime = now;
+                currentPage = 0;
+                pagesContainer.classList.remove('show-axolotl');
+                document.body.classList.remove('show-axolotl');
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 800);
+            }
+        }, { passive: true });
+        
+        // Regenerate shapes on window resize
+        window.addEventListener('resize', () => {
+            generateShapes();
+        });
+    </script>
+
+    <!-- Load p5.js and sketch -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="sketch.js" defer></script>
+</body>
+</html>
