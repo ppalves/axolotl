@@ -333,9 +333,9 @@
             let deltaGamma = currentTilt.gamma - initialTilt.gamma;
             
             // Map tilt to movement with increased sensitivity
-            // 1 degree tilt produces ~40px movement for strong effect
-            window.tiltOffsetX = deltaGamma * 10;
-            window.tiltOffsetY = deltaBeta * 10;
+            // 1 degree tilt produces ~15px movement for medium effect
+            window.tiltOffsetX = deltaGamma * 15;
+            window.tiltOffsetY = deltaBeta * 15;
         }
         
         // Request permission and setup device orientation for iOS 13+
@@ -347,7 +347,7 @@
                         .then(permissionState => {
                             if (permissionState === 'granted') {
                                 window.addEventListener('deviceorientation', captureOrientation);
-                                setInterval(processOrientation, 66); // 15fps processing
+                                setInterval(processOrientation, 200); // 5fps processing
                             }
                         })
                         .catch(console.error);
@@ -355,7 +355,7 @@
             } else {
                 // Android and older iOS
                 window.addEventListener('deviceorientation', captureOrientation);
-                setInterval(processOrientation, 66); // 15fps processing
+                setInterval(processOrientation, 200); // 5fps processing
             }
         }
     </script>
