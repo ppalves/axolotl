@@ -535,11 +535,11 @@ class axolotl{
     // Draw header bar at the top
     blendMode(BLEND)
     fill(0, 0, 0, 5)  // Dark overlay with opacity
-    rect(0, 0, width, 60)
+    rect(0, 0, width, 100)
     
     // Draw header text
     fill(255, 255, 255, 230)  // White text
     textAlign(CENTER, CENTER)
-    textSize(28)
-    text('An Axolotl, for Chana', width / 2, 35)
+    textSize(30)
+    text('An Axolotl, for Chana', width / 2, 50)
   }
