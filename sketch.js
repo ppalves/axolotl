@@ -460,6 +460,30 @@ class axolotl{
     canvas.parent('p5-container');
     frameRate(60);
     textFont('Bagel Fat One')
+    
+    // Generate random axolotl on first load
+    randomizeAxolotl();
+  }
+  
+  function randomizeAxolotl() {
+    face_clr[0] = random(110, 210)
+    face_clr[1] = random(110, 210)
+    face_clr[2] = random(110, 210)
+    gill_clr1[0] = random(110, 210)
+    gill_clr1[1] = random(110, 210)
+    gill_clr1[2] = random(110, 210)
+    gill_clr2[0] = random(110, 210)
+    gill_clr2[1] = random(110, 210)
+    gill_clr2[2] = random(110, 210)
+    gill_type = int(random()*100)
+    eyes_type = int(random()*100)
+    eyes_clr[0] = random(60, 200)
+    eyes_clr[1] = random(60, 200)
+    eyes_clr[2] = random(60, 200)
+    mouth_type = int(random()*100)
+    mouth_clr[0] = random(110, 210)
+    mouth_clr[1] = random(110, 210)
+    mouth_clr[2] = random(110, 210)
   }
   
   function windowResized() {
@@ -499,24 +523,7 @@ class axolotl{
     // Click to switch to another axolotl
     // Change the values of key parameters using "random," and perform the switching through function calls within the axolotl class
     if (mouseIsPressed == true){
-      face_clr[0] = random(110, 210)
-      face_clr[1] = random(110, 210)
-      face_clr[2] = random(110, 210)
-      gill_clr1[0] = random(110, 210)
-      gill_clr1[1] = random(110, 210)
-      gill_clr1[2] = random(110, 210)
-      gill_clr2[0] = random(110, 210)
-      gill_clr2[1] = random(110, 210)
-      gill_clr2[2] = random(110, 210)
-      gill_type= int(random()*100)
-      eyes_type= int(random()*100)
-      eyes_clr[0] = random(60, 200)
-      eyes_clr[1] = random(60, 200)
-      eyes_clr[2] = random(60, 200)
-      mouth_type= int(random()*100)
-      mouth_clr[0] = random(110, 210)
-      mouth_clr[1] = random(110, 210)
-      mouth_clr[2] = random(110, 210)
+      randomizeAxolotl()
     }
     noStroke()
     // Call functions to draw the axolotl
