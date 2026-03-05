@@ -306,7 +306,16 @@
         window.tiltOffsetX = 0;
         window.tiltOffsetY = 0;
         
+        // Throttle orientation calculations to reduce performance impact
+        let lastOrientationUpdate = 0;
+        const ORIENTATION_UPDATE_INTERVAL = 66; // ~15fps for orientation updates (66ms)
+        
         function handleOrientation(event) {
+            const now = Date.now();
+            // Only update if 33ms has passed since last update
+            if (now - lastOrientationUpdate < ORIENTATION_UPDATE_INTERVAL) return;
+            lastOrientationUpdate = now;
+            
             let beta = event.beta;   // -180 to 180, rotation around X axis
             let gamma = event.gamma; // -90 to 90, rotation around Z axis
             
@@ -325,9 +334,9 @@
             let deltaGamma = currentTilt.gamma - initialTilt.gamma;
             
             // Map tilt to movement with increased sensitivity
-            // 1 degree tilt produces ~80px movement for strong effect
-            window.tiltOffsetX = (deltaGamma / 10) * 800;
-            window.tiltOffsetY = (deltaBeta / 10) * 800;
+            // 1 degree tilt produces ~40px movement for strong effect
+            window.tiltOffsetX = deltaGamma * 40;
+            window.tiltOffsetY = deltaBeta * 40;
         }
         
         // Request permission and setup device orientation for iOS 13+
