@@ -153,7 +153,7 @@
         
         .scroll-hint {
             position: absolute;
-            bottom: 70px;
+            bottom: 7rem;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -325,9 +325,9 @@
             let deltaGamma = currentTilt.gamma - initialTilt.gamma;
             
             // Map tilt to movement with increased sensitivity
-            // 10 degree tilt produces ~80px movement for noticeable effect
-            window.tiltOffsetX = (deltaGamma / 10) * 80;
-            window.tiltOffsetY = (deltaBeta / 10) * 80;
+            // 1 degree tilt produces ~80px movement for strong effect
+            window.tiltOffsetX = (deltaGamma / 10) * 800;
+            window.tiltOffsetY = (deltaBeta / 10) * 800;
         }
         
         // Request permission and setup device orientation for iOS 13+
